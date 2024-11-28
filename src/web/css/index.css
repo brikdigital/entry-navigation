@@ -1,0 +1,12 @@
+.entry-nav-padded {
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+}
+.entry-nav-container {
+    flex-direction: column;
+    align-items: flex-start !important;
+}
+
+.entry-nav-container #submenu button {
+    margin-left: .5rem;
+}

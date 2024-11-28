@@ -1,0 +1,48 @@
+{
+    "name": "brikdigital/entry-navigation",
+    "description": "Manage an entry's navigation position through its edit page.",
+    "type": "craft-plugin",
+    "version": "5.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "navigation",
+        "menu"
+    ],
+    "support": {
+        "issues": "https://github.com/brikdigital/entry-navigation/issues?state=open",
+        "source": "https://github.com/brikdigital/entry-navigation",
+        "rss": "https://github.com/brikdigital/entry-navigation/commits/v2.atom"
+    },
+    "license": "MPL-2.0",
+    "authors": [
+        {
+            "name": "Brik.digital",
+            "homepage": "https://brik.digital"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "craftcms/cms": "^5.0.0",
+        "verbb/navigation": "^3.0.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "brikdigital\\entrynavigation\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Entry Navigation",
+        "handle": "entry-navigation",
+        "developer": "Brik.digital",
+        "class": "brikdigital\\entrynavigation\\EntryNavigation"
+    },
+    "config": {
+        "allow-plugins": {
+            "craftcms/plugin-installer": true,
+            "yiisoft/yii2-composer": true
+        }
+    }
+}
