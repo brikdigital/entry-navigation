@@ -1,6 +1,3 @@
-console.log(window.__ENTRY_ID__)
-console.log(window.__ENTRY_URL__);
-
 $('.navigation-element-sidebar #navSelect').change(function (e) {
     $(".navigation-element-sidebar #submenu").empty();
 
@@ -41,7 +38,6 @@ function buildSubmenu(data) {
     $(".navigation-element-sidebar #submenu").append(
         $("<button class='btn submit icon add'>Add</button>").click((e) => {
             e.preventDefault();
-            console.log("hi");
 
             const node = {
                 // Meta
