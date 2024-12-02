@@ -4,13 +4,18 @@ namespace brikdigital\entrynavigation\helpers;
 
 use Craft;
 use craft\base\Element;
+use craft\helpers\ArrayHelper;
 use craft\helpers\Html;
 use craft\helpers\UrlHelper;
 use craft\web\View;
+use verbb\navigation\elements\Node;
+use verbb\navigation\models\Nav;
 use verbb\navigation\Navigation;
 
 class ElementSidebarHelper
 {
+    private static array $breadcrumbs = [];
+
     public static function getSidebarHtml(Element $element): string
     {
         if ($element->uri === null) {
@@ -34,10 +39,51 @@ class ElementSidebarHelper
     private static function renderSidebarInnerHtml(Element $element): string
     {
         $navs = Navigation::$plugin->getNavs()->getAllNavs();
+        $crumbs = self::getElementBreadcrumbs($element->id);
 
         return Craft::$app->view->renderTemplate('entry-navigation/_element-sidebar', [
             'navs' => $navs,
+            'crumbs' => $crumbs,
             'fetchNavItemsUrl' => UrlHelper::actionUrl('entry-navigation/data/fetch-nav-items')
         ]);
+    }
+
+    public static function getElementBreadcrumbs(int $id): array
+    {
+        $nodes = Node::findAll(['elementId' => $id]);
+        foreach ($nodes as $i => $node) {
+            $nav = Navigation::$plugin->getNavs()->getNavById($node->navId);
+            self::pushNodesToCrumbs($node, $nav, $i);
+        }
+
+        // :lostdiver: 😦
+        return array_map(function ($occs) {
+            return array_map(function ($crumbList) {
+                return array_reverse($crumbList);
+            }, $occs);
+        }, self::$breadcrumbs);
+    }
+
+    /**
+     * Recursively push nodes to our breadcrumb list, until we've reached the top.
+     *
+     * @param Node|null $node
+     * @param Nav $nav
+     * @param int $i
+     * @return void
+     */
+    private static function pushNodesToCrumbs(?Node $node, Nav $nav, int $i): void
+    {
+        // If for some reason there's no node, let's bail.
+        if (!$node) return;
+
+        // Add our current node to the breadcrumbs...
+        self::$breadcrumbs[$nav->name][$i][] = $node->title;
+        // ...and if we've reached the root node, call it a day.
+        if ($node->level === 1) return;
+
+        // If we've got more nodes to go, however, let's do it all over.
+        $nextNode = $node->getParent();
+        self::pushNodesToCrumbs($nextNode, $nav, $i);
     }
 }

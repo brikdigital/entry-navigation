@@ -4,9 +4,26 @@
 
 {% set options = ['Select a menu']|merge(navs|map(n => "#{n.name}")) %}
 
-{#{% dd options %}#}
-
 <div class="data entry-nav-container">
+    <div class="value" style="flex-direction: column; align-items:flex-start; margin-bottom: .5rem; width: 100%;">
+        {# FIXME: for the love of god, styling #}
+        {% for navName, occs in crumbs %}
+            {% for crumbList in occs %}
+                <div style="width: 100%; margin-bottom: 1rem">
+                    <p class="h6" style="padding-left: 16px; margin-block: 0 var(--s) !important;">Menu: {{ navName }}</p>
+                    <div style="background-color: var(--gray-050); border-radius: var(--large-border-radius); box-shadow: 0 0 0 1px #cdd8e4, 0 2px 12px rgba(205, 216, 228, .5); margin-block-end: 0 !important; padding: var(--m);">
+                        <p style="display: flex; align-items: center; gap: .5rem;">{{ crumbList|join('<span class="chevron"></span>')|raw }}</p>
+                        <div style="display: flex; flex-direction: column;">
+                            <span style="padding: 0 12px; width: fit-content; font-size: small;">Title</span>
+                            <input type="text" id="nodeTitle" class="text" name="nodeTitle" value="mmm..." autocomplete="off" />
+                            {# TODO: <select> to reconfigure parent. do note that this requires fetching all the
+                                structures per occurence of the node and bring them into the template scope #}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
     <div class="value">
         <div class="select">
             <select id="navSelect" data-action="{{ fetchNavItemsUrl }}">
@@ -15,15 +32,6 @@
                 {% endfor %}
             </select>
         </div>
-{#        {{ forms.select({#}
-{#            id: 'navSelect',#}
-{#            options: options,#}
-{#            inputAttributes: {#}
-{#                data: {#}
-{#                    action: fetchNavItemsUrl#}
-{#                }#}
-{#            }#}
-{#        }) }}#}
     </div>
     <div id="submenu"></div>
 </div>

@@ -10,3 +10,21 @@
 .entry-nav-container #submenu button {
     margin-left: .5rem;
 }
+
+.chevron {
+    border: solid;
+    border-width: 0 .125rem .125rem 0;
+    content: "";
+    display: block;
+    font-size: 0;
+    height: .4375rem;
+    opacity: .8;
+    position: relative;
+    transition: transform .1s linear;
+    width: .4375rem;
+    transform: rotate(-45deg);
+}
+
+.chevron.expanded {
+    transform: rotate(45deg) !important;
+}
