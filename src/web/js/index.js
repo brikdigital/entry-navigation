@@ -86,6 +86,6 @@ function buildSubmenu(data) {
                     // TODO: Make this also revert the navSelect
                     $(".navigation-element-sidebar #submenu").empty();
                 });
-        });
+        })
     );
 }
