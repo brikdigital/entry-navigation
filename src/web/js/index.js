@@ -1,3 +1,23 @@
+$('.navigation-element-sidebar button:contains("Save")').click(function (e) {
+    e.preventDefault();
+
+    const nodeId = $(this).parents("[data-id]").attr("data-id");
+    const title = $(this).parent().find("#nodeTitle").val();
+
+    return Craft.sendActionRequest('POST', "entry-navigation/nodes/edit-node", {
+        data: {
+            nodeId,
+            title
+        }
+    })
+        .then(res => {
+            Craft.cp.displaySuccess("Saved node");
+        })
+        .catch(err => {
+            Craft.cp.displayError(err.response.data.message);
+        })
+});
+
 $('.navigation-element-sidebar #navSelect').change(function (e) {
     $(".navigation-element-sidebar #submenu").empty();
 
@@ -13,8 +33,8 @@ $('.navigation-element-sidebar #navSelect').change(function (e) {
     })
         .then(res => {
             buildSubmenu(res.data);
-        })
-})
+        });
+});
 
 // I have absolutely no shame, nor regrets.
 // Well, maybe some regrets.
@@ -48,14 +68,13 @@ function buildSubmenu(data) {
                 parentId: $(".navigation-element-sidebar #parentSelect").find(':selected').val(),
 
                 // Entry data
-                // elementId: $(".heading:contains('Id')").siblings(".value").text(),
                 elementSiteId: Craft.siteId,
                 elementId: window.__ENTRY_ID__,
                 title: $("input[type='text'][id='title']").val(),
                 type: "craft\\elements\\Entry",
                 url: window.__ENTRY_URL__,
                 newWindow: "", // TODO: make this an actual option
-            }
+            };
 
             Craft.sendActionRequest('POST', 'navigation/nodes/add-nodes', {
                 data: {
@@ -66,7 +85,7 @@ function buildSubmenu(data) {
                     Craft.cp.displayNotice(res.data.message);
                     // TODO: Make this also revert the navSelect
                     $(".navigation-element-sidebar #submenu").empty();
-                })
-        })
-    )
+                });
+        });
+    );
 }

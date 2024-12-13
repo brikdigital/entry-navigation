@@ -78,7 +78,10 @@ class ElementSidebarHelper
         if (!$node) return;
 
         // Add our current node to the breadcrumbs...
-        self::$breadcrumbs[$nav->name][$i][] = $node->title;
+        self::$breadcrumbs[$nav->name][$i][] = [
+            "id" => $node->id,
+            "title" => $node->title
+        ];
         // ...and if we've reached the root node, call it a day.
         if ($node->level === 1) return;
 
