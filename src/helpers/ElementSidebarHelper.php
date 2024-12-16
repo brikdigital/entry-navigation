@@ -39,7 +39,7 @@ class ElementSidebarHelper
     private static function renderSidebarInnerHtml(Element $element): string
     {
         $navs = Navigation::$plugin->getNavs()->getAllNavs();
-        $crumbs = self::getElementBreadcrumbs($element->id);
+        $crumbs = self::getElementBreadcrumbs($element->canonicalId);
 
         return Craft::$app->view->renderTemplate('entry-navigation/_element-sidebar', [
             'navs' => $navs,
