@@ -39,11 +39,19 @@ class ElementSidebarHelper
     private static function renderSidebarInnerHtml(Element $element): string
     {
         $navs = Navigation::$plugin->getNavs()->getAllNavs();
+        $optionsByNav = [];
         $crumbs = self::getElementBreadcrumbs($element->canonicalId);
+
+        foreach ($navs as $nav) {
+            $nav = Navigation::$plugin->getNavs()->getNavById($nav->id);
+            $nodes = Navigation::$plugin->getNodes()->getNodesForNav($nav->id);
+            $optionsByNav[$nav->id] = Navigation::$plugin->getNodes()->getParentOptions($nodes, $nav);
+        }
 
         return Craft::$app->view->renderTemplate('entry-navigation/_element-sidebar', [
             'navs' => $navs,
             'crumbs' => $crumbs,
+            'optionsByNav' => $optionsByNav,
             'fetchNavItemsUrl' => UrlHelper::actionUrl('entry-navigation/data/fetch-nav-items')
         ]);
     }
@@ -77,10 +85,20 @@ class ElementSidebarHelper
         // If for some reason there's no node, let's bail.
         if (!$node) return;
 
+        $parent = $node->getParent();
+        $parentLabel = "";
+        if ($parent) {
+            for ($j = 1; $j < $parent->level; $j++) {
+                $parentLabel .= '    ';
+            }
+            $parentLabel .= $parent->title;
+        }
+
         // Add our current node to the breadcrumbs...
         self::$breadcrumbs[$nav->name][$i][] = [
             "id" => $node->id,
-            "title" => $node->title
+            "title" => $node->title,
+            "parent" => $parentLabel
         ];
         // ...and if we've reached the root node, call it a day.
         if ($node->level === 1) return;

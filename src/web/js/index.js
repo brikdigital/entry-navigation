@@ -1,17 +1,21 @@
+// TODO: Maybe, potentially, rewrite to use Garnish at some point.
+
 $('.navigation-element-sidebar button:contains("Save")').click(function (e) {
     e.preventDefault();
 
     const nodeId = $(this).parents("[data-id]").attr("data-id");
     const title = $(this).parent().find("#nodeTitle").val();
+    const parent = $(this).parent().find('#parent').val();
 
     return Craft.sendActionRequest('POST', "entry-navigation/nodes/edit-node", {
         data: {
             nodeId,
-            title
+            title,
+            parent
         }
     })
-        .then(res => {
-            Craft.cp.displaySuccess("Saved node");
+        .then(() => {
+            window.location.reload();
         })
         .catch(err => {
             Craft.cp.displayError(err.response.data.message);
@@ -81,10 +85,8 @@ function buildSubmenu(data) {
                     nodes: [node]
                 }
             })
-                .then(res => {
-                    Craft.cp.displayNotice(res.data.message);
-                    // TODO: Make this also revert the navSelect
-                    $(".navigation-element-sidebar #submenu").empty();
+                .then(() => {
+                    window.location.reload();
                 });
         })
     );

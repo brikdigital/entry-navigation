@@ -9,24 +9,38 @@
         {# FIXME(lexisother): for the love of god, actual css #}
         {# FIXME(lexisother): maybe care about mobile styling too? #}
         <div class="value" style="flex-direction: column; align-items:flex-start; margin-bottom: .5rem; width: 100%;">
-            {% for navName, occs in crumbs %}
-                {% for crumbList in occs %}
+            {% for nav in navs %}
+                {% set navCrumbs = crumbs[nav.name] ?? null %}
+                {% for crumbList in navCrumbs %}
                     {# NOTE(lexisother): at some point I think it's really important to restructure the dataset that
                         gets sent to the template so we have everything we could possibly need on demand.
                         these maps are ugly and they really need to go #}
-                    <div data-id="{{ crumbList|map(n => n.id)|last }}" style="width: 100%; margin-bottom: 1rem">
-                        <p class="h6" style="padding-left: 16px; margin-block: 0 var(--s) !important;">Menu: {{ navName }}</p>
+                    {% set nodeId = crumbList|map(n => n.id)|last %}
+                    <div data-id="{{ nodeId }}" style="width: 100%; margin-bottom: 1rem">
+                        <p class="h6" style="padding-left: 16px; margin-block: 0 var(--s) !important;">Menu: {{ nav.name }}</p>
                         <div style="background-color: var(--gray-050); border-radius: var(--large-border-radius); box-shadow: 0 0 0 1px #cdd8e4, 0 2px 12px rgba(205, 216, 228, .5); margin-block-end: 0 !important; padding: var(--m);">
                             <p style="display: flex; align-items: center; gap: .5rem;">{{ crumbList|map(n => n.title)|join('<span class="chevron"></span>')|raw }}</p>
                             <div style="display: flex; flex-direction: column; gap: .5rem;">
-                                {# TODO: <select> to reconfigure parent. do note that this requires fetching all the
-                                    structures per occurence of the node and bring them into the template scope #}
                                 <div>
                                     <span style="padding: 0 6px; width: fit-content; font-size: small;">Title</span>
                                     <input type="text" id="nodeTitle" class="text" name="nodeTitle" value="{{ (crumbList|last).title }}" autocomplete="off" />
                                 </div>
                                 <div>
-                                    <span style="padding: 0 6px; width: fit-content; font-size: small;">Title</span>
+                                    <span style="padding: 0 6px; width: fit-content; font-size: small;">Parent</span>
+                                    <div class="select">
+                                        <select id="parent" name="parent">
+                                            {# TODO: fix??? #}
+                                            {% for item in optionsByNav[nav.id] %}
+                                                {% if item.value is not same as nodeId %}
+                                                    {% set parent = (crumbList|last).parent %}
+                                                    <option
+                                                            value="{{ item.value }}"
+                                                            {% if item.label is same as parent %}selected{% endif %}
+                                                    >{{ item.label }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
                                 </div>
                                 <button class="btn submit" style="width: 20%;">Save</button>
                             </div>
