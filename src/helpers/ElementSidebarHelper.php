@@ -4,9 +4,9 @@ namespace brikdigital\entrynavigation\helpers;
 
 use Craft;
 use craft\base\Element;
-use craft\helpers\ArrayHelper;
 use craft\helpers\Html;
 use craft\helpers\UrlHelper;
+use craft\models\Site;
 use craft\web\View;
 use verbb\navigation\elements\Node;
 use verbb\navigation\models\Nav;
@@ -38,13 +38,13 @@ class ElementSidebarHelper
 
     private static function renderSidebarInnerHtml(Element $element): string
     {
-        $navs = Navigation::$plugin->getNavs()->getAllNavs();
+//        $navs = Navigation::$plugin->getNavs()->getAllNavs();
+        $navs = Navigation::$plugin->getNavs()->getEditableNavsForSite($element->site);
         $optionsByNav = [];
-        $crumbs = self::getElementBreadcrumbs($element->canonicalId);
+        $crumbs = self::getElementBreadcrumbs($element->canonicalId, $element->site);
 
         foreach ($navs as $nav) {
-            $nav = Navigation::$plugin->getNavs()->getNavById($nav->id);
-            $nodes = Navigation::$plugin->getNodes()->getNodesForNav($nav->id);
+            $nodes = Navigation::$plugin->getNodes()->getNodesForNav($nav->id,$element->siteId);
             $optionsByNav[$nav->id] = Navigation::$plugin->getNodes()->getParentOptions($nodes, $nav);
         }
 
@@ -56,13 +56,33 @@ class ElementSidebarHelper
         ]);
     }
 
-    public static function getElementBreadcrumbs(int $id): array
+    public static function getElementBreadcrumbs(int $id, Site $site): array
     {
-        $nodes = Node::findAll(['elementId' => $id]);
-        foreach ($nodes as $i => $node) {
-            $nav = Navigation::$plugin->getNavs()->getNavById($node->navId);
-            self::pushNodesToCrumbs($node, $nav, $i);
+        // NOTE(lexisother): Apparently `Craft::$app->sites->currentSite` is unreliable as all hell
+
+        /** @var Nav[] $navs */
+        $navs = Navigation::$plugin->getNavs()->getEditableNavsForSite($site);
+        /** @var Node[] $nodes */
+        $nodes = [];
+
+        // replace $navs with array_slice($navs, 1, 1) to get the second menu for debugging
+        // otherwise any dd(...) invocation will only show data for the first iteration
+        foreach ($navs as $nav) {
+            $navNodes = Navigation::$plugin->getNodes()->getNodesForNav($nav->id, $site->id);
+            $navNodes = array_filter($navNodes, function ($node) use ($id) {
+                return $node->element != null && $node->element->canonicalId === $id;
+            });
+
+            $nodes[$nav->id] = $navNodes;
         }
+
+        foreach ($nodes as $navId => $nodeList) {
+            foreach ($nodeList as $i => $node) {
+                $nav = Navigation::$plugin->getNavs()->getNavById($node->navId);
+                self::pushNodesToCrumbs($node, $nav, $i);
+            }
+        }
+        
 
         // :lostdiver: 😦
         return array_map(function ($occs) {
