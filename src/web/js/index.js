@@ -1,6 +1,6 @@
 // TODO: Maybe, potentially, rewrite to use Garnish at some point.
 
-$('.navigation-element-sidebar button:contains("Save")').click(function (e) {
+$('.navigation-element-sidebar button[id="saveButton"]').click(function (e) {
     e.preventDefault();
 
     const nodeId = $(this).parents("[data-id]").attr("data-id");
@@ -21,6 +21,25 @@ $('.navigation-element-sidebar button:contains("Save")').click(function (e) {
             Craft.cp.displayError(err.response.data.message);
         })
 });
+
+$('.navigation-element-sidebar button[id="deleteButton"]').click(function (e) {
+    e.preventDefault()
+
+    const elementId = $(this).parents("[data-id]").data("id");
+
+    return Craft.sendActionRequest('POST', 'entry-navigation/nodes/delete-node', {
+        data: {
+            elementId,
+            siteId: Craft.siteId
+        }
+    })
+        .then(() => {
+            window.location.reload();
+        })
+        .catch(err => {
+            Craft.cp.displayError(err.response.data.message);
+        })
+})
 
 $('.navigation-element-sidebar #navSelect').change(function (e) {
     $(".navigation-element-sidebar #submenu").empty();

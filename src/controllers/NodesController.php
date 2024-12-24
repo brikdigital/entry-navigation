@@ -51,4 +51,17 @@ class NodesController extends Controller
             ]);
         }
     }
+
+    public function actionDeleteNode()
+    {
+        $nodeId = $this->request->post('nodeId');
+
+        $node = Navigation::$plugin->getNodes()->getNodeById($nodeId);
+        if (!Craft::$app->elements->deleteElement($node)) {
+            return $this->asJson([
+                "success" => false,
+                "message" => "Couldn't delete node"
+            ]);
+        }
+    }
 }

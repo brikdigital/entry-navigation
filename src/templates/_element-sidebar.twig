@@ -29,7 +29,6 @@
                                     <span style="padding: 0 6px; width: fit-content; font-size: small;">Parent</span>
                                     <div class="select">
                                         <select id="parent" name="parent">
-                                            {# TODO: fix??? #}
                                             {% for item in optionsByNav[nav.id] %}
                                                 {% if item.value is not same as nodeId %}
                                                     {% set parent = (crumbList|last).parent %}
@@ -42,7 +41,17 @@
                                         </select>
                                     </div>
                                 </div>
-                                <button class="btn submit" style="width: 20%;">Save</button>
+                                <div style="display: flex; justify-content: space-between">
+                                    <div style="display: flex; gap: .5rem">
+                                        <button id="saveButton" class="btn submit">Save</button>
+                                        <button id="deleteButton" class="btn submit">Delete</button>
+                                    </div>
+                                    <div>
+                                        <a href="{{ url('navigation/navs/build/' ~ nav.id) }}" style="color: unset">
+                                            <button class="btn">Edit menu</button>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
