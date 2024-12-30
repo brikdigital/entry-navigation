@@ -4,6 +4,7 @@ namespace brikdigital\entrynavigation\helpers;
 
 use Craft;
 use craft\base\Element;
+use craft\elements\Entry;
 use craft\helpers\Html;
 use craft\helpers\UrlHelper;
 use craft\models\Site;
@@ -14,6 +15,10 @@ use verbb\navigation\Navigation;
 
 class ElementSidebarHelper
 {
+    public const ELIGIBLE_ELEMENT_TYPES = [
+        Entry::class
+    ];
+
     private static array $breadcrumbs = [];
 
     public static function getSidebarHtml(Element $element): string
@@ -58,8 +63,6 @@ class ElementSidebarHelper
 
     public static function getElementBreadcrumbs(int $id, Site $site): array
     {
-        // NOTE(lexisother): Apparently `Craft::$app->sites->currentSite` is unreliable as all hell
-
         /** @var Nav[] $navs */
         $navs = Navigation::$plugin->getNavs()->getEditableNavsForSite($site);
         /** @var Node[] $nodes */
@@ -82,7 +85,7 @@ class ElementSidebarHelper
                 self::pushNodesToCrumbs($node, $nav, $i);
             }
         }
-        
+
 
         // :lostdiver: 😦
         return array_map(function ($occs) {
