@@ -33,6 +33,13 @@ class EntryNavigation extends Plugin
             if (!in_array($element::class, ElementSidebarHelper::ELIGIBLE_ELEMENT_TYPES)) return;
             if ($element->getIsUnpublishedDraft()) return;
 
+            $event->html .= ElementSidebarHelper::getSidebarHtml($element);
+
+            // TODO: Bring this back and rewrite it to use Dom\HTMLDocument once we hit 8.4
+            //       Once this happens, remove movePanel.js from the asset bundle as its
+            //       functionality is a stopgap solution
+            return;
+
             // Ready up our HTML as a DOMElement
             $ourHTML = ElementSidebarHelper::getSidebarHtml($element);
             $ourNode = new \DOMDocument();

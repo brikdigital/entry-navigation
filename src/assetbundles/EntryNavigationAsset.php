@@ -20,6 +20,7 @@ class EntryNavigationAsset extends AssetBundle
         ];
 
         $this->js = [
+            'js/movePanel.js',
             'js/ignoreOurFormElements.js',
             'js/index.js',
         ];
