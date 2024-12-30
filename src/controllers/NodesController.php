@@ -55,8 +55,9 @@ class NodesController extends Controller
     public function actionDeleteNode()
     {
         $nodeId = $this->request->post('nodeId');
+        $siteId = $this->request->post('siteId');
 
-        $node = Navigation::$plugin->getNodes()->getNodeById($nodeId);
+        $node = Navigation::$plugin->getNodes()->getNodeById($nodeId, $siteId);
         if (!Craft::$app->elements->deleteElement($node)) {
             return $this->asJson([
                 "success" => false,
