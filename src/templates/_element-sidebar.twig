@@ -61,7 +61,7 @@
     {% endif %}
     <div class="value">
         <div class="select">
-            <select id="navSelect" data-action="{{ fetchNavItemsUrl }}">
+            <select id="navSelect" data-action="{{ fetchNavItemsUrl }}" form="">
                 {% for nav in ['Select a menu']|merge(navs) %}
                     <option value="{{ loop.index }}" data-id="{{ nav.id ?? 0 }}">{{ nav }}</option>
                 {% endfor %}

@@ -68,7 +68,7 @@ function buildSubmenu(data) {
 
     const menu = [
         "<div class='select'>",
-        "  <select id='parentSelect'>"
+        "  <select id='parentSelect' form=''>"
     ];
     for (let option of options) {
         menu.push(`    <option value='${option.value}'>${option.label}</option>`);
