@@ -24,7 +24,8 @@
         }
     ],
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
+        "ext-dom": "*",
         "craftcms/cms": "^5.0.0",
         "verbb/navigation": "^3.0.5"
     },
