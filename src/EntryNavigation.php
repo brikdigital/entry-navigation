@@ -31,6 +31,7 @@ class EntryNavigation extends Plugin
             /** @var Element $element */
             $element = $event->sender;
             if (!in_array($element::class, ElementSidebarHelper::ELIGIBLE_ELEMENT_TYPES)) return;
+            if ($element->getIsDraft()) return;
 
             // Ready up our HTML as a DOMElement
             $ourHTML = ElementSidebarHelper::getSidebarHtml($element);
