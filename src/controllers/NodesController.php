@@ -62,6 +62,10 @@ class NodesController extends Controller
                 "success" => false,
                 "message" => "Couldn't delete node"
             ]);
+        } else {
+            return $this->asJson([
+                "success" => true
+            ]);
         }
     }
 }

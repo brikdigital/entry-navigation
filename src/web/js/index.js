@@ -3,9 +3,11 @@
 $('.navigation-element-sidebar button[id="saveButton"]').click(function (e) {
     e.preventDefault();
 
+    // excuse the mess
+    // TODO(lexisother): Figure out a more jQuery:tm: Agnostic method for this
     const nodeId = $(this).parents("[data-id]").attr("data-id");
-    const title = $(this).parent().find("#nodeTitle").val();
-    const parent = $(this).parent().find('#parent').val();
+    const title = $(this).parent().parent().parent().find("#nodeTitle").val();
+    const parent = $(this).parent().parent().parent().find('#parent').val();
 
     return Craft.sendActionRequest('POST', "entry-navigation/nodes/edit-node", {
         data: {
@@ -25,11 +27,11 @@ $('.navigation-element-sidebar button[id="saveButton"]').click(function (e) {
 $('.navigation-element-sidebar button[id="deleteButton"]').click(function (e) {
     e.preventDefault()
 
-    const elementId = $(this).parents("[data-id]").data("id");
+    const nodeId = $(this).parents("[data-id]").data("id");
 
     return Craft.sendActionRequest('POST', 'entry-navigation/nodes/delete-node', {
         data: {
-            elementId,
+            nodeId,
             siteId: Craft.siteId
         }
     })

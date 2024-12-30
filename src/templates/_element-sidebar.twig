@@ -23,12 +23,12 @@
                             <div style="display: flex; flex-direction: column; gap: .5rem;">
                                 <div>
                                     <span style="padding: 0 6px; width: fit-content; font-size: small;">Title</span>
-                                    <input type="text" id="nodeTitle" class="text" name="nodeTitle" value="{{ (crumbList|last).title }}" autocomplete="off" />
+                                    <input type="text" id="nodeTitle" class="text" name="nodeTitle" value="{{ (crumbList|last).title }}" autocomplete="off" form="" />
                                 </div>
                                 <div>
                                     <span style="padding: 0 6px; width: fit-content; font-size: small;">Parent</span>
                                     <div class="select">
-                                        <select id="parent" name="parent">
+                                        <select id="parent" name="parent" form="">
                                             {% for item in optionsByNav[nav.id] %}
                                                 {% if item.value is not same as nodeId %}
                                                     {% set parent = (crumbList|last).parent %}
