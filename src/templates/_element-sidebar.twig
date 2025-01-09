@@ -43,12 +43,12 @@
                                 </div>
                                 <div style="display: flex; justify-content: space-between">
                                     <div style="display: flex; gap: .5rem">
-                                        <button id="saveButton" class="btn submit">Save</button>
-                                        <button id="deleteButton" class="btn submit">Delete</button>
+                                        <button form id="saveButton" class="btn submit">Save</button>
+                                        <button form id="deleteButton" class="btn submit">Delete</button>
                                     </div>
                                     <div>
                                         <a href="{{ url('navigation/navs/build/' ~ nav.id) }}" style="color: unset">
-                                            <button class="btn">Edit menu</button>
+                                            <button form class="btn">Edit menu</button>
                                         </a>
                                     </div>
                                 </div>
@@ -68,5 +68,5 @@
             </select>
         </div>
     </div>
-    <div id="submenu"></div>
+    <div id="submenu" style="display: none"></div>
 </div>

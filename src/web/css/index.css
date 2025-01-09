@@ -3,8 +3,10 @@
     padding-bottom: .5rem;
 }
 .entry-nav-container {
+    display: flex;
     flex-direction: column;
     align-items: flex-start !important;
+    gap: var(--s);
 }
 
 .entry-nav-container #submenu button {

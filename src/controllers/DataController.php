@@ -18,6 +18,7 @@ class DataController extends Controller
         $nodes = Navigation::$plugin->getNodes()->getNodesForNav($navId);
 
         return $this->asJson([
+            'nav' => $nav,
             'nodes' => $nodes,
             'options' => Navigation::$plugin->getNodes()->getParentOptions($nodes, $nav),
         ]);

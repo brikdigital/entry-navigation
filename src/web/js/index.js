@@ -45,9 +45,11 @@ $('.navigation-element-sidebar button[id="deleteButton"]').click(function (e) {
 
 $('.navigation-element-sidebar #navSelect').change(function (e) {
     $(".navigation-element-sidebar #submenu").empty();
+    $(".navigation-element-sidebar .entry-nav-container .icon.add").remove();
 
     const navId = $(this).find(':selected').data('id');
     if (navId === 0) {
+        $(".navigation-element-sidebar #submenu").hide();
         return;
     }
 
@@ -64,23 +66,30 @@ $('.navigation-element-sidebar #navSelect').change(function (e) {
 // I have absolutely no shame, nor regrets.
 // Well, maybe some regrets.
 function buildSubmenu(data) {
-    const options = data.options;
+    const { nav, options } = data;
+    let allowsNesting = nav.maxLevels >= 2;
 
-    const menu = [
-        "<div class='select'>",
-        "  <select id='parentSelect' form=''>"
-    ];
-    for (let option of options) {
-        menu.push(`    <option value='${option.value}'>${option.label}</option>`);
+    if (allowsNesting) {
+        const menu = [
+            "<div class='select'>",
+            "  <select id='parentSelect' form=''>"
+        ];
+        for (let option of options) {
+            menu.push(`    <option value='${option.value}'>${option.label}</option>`);
+        }
+        menu.push("  </select>");
+        menu.push(...[
+            "  </select>",
+            "</div>"
+        ]);
+
+        $(".navigation-element-sidebar #submenu").append($(menu.join("\n")));
+        $(".navigation-element-sidebar #submenu").show();
+    } else {
+        $(".navigation-element-sidebar #submenu").hide();
     }
-    menu.push("  </select>");
-    menu.push(...[
-        "  </select>",
-        "</div>"
-    ]);
 
-    $(".navigation-element-sidebar #submenu").append($(menu.join("\n")));
-    $(".navigation-element-sidebar #submenu").append(
+    $(".navigation-element-sidebar .entry-nav-container").append(
         $("<button class='btn submit icon add'>Add</button>").click((e) => {
             e.preventDefault();
 
