@@ -2,7 +2,7 @@
     "name": "brikdigital/entry-navigation",
     "description": "Manage an entry's navigation position through its edit page.",
     "type": "craft-plugin",
-    "version": "5.0.4",
+    "version": "5.0.5",
     "keywords": [
         "craft",
         "cms",
