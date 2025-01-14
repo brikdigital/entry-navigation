@@ -16,7 +16,7 @@ class NodesController extends Controller
         $nodeId = $this->request->post('nodeId');
         $title = $this->request->post('title');
         $parent = $this->request->post('parent');
-        if (!$nodeId || !$title || !$parent) {
+        if (!isset($nodeId) || !isset($title) || !isset($parent)) {
             $this->response->statusCode = 422; // unprocessable content
             return $this->asJson([
                 "success" => false,
